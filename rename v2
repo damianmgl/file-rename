@@ -1,0 +1,101 @@
+import pandas as pd
+import os
+from datetime import date
+cur_day = str(date.today().strftime("%Y%m%d"))  # date in yyymmdd format
+source = r'U:\get_filename'  # the source with the Candriam .pdfs
+dframe = os.listdir(source)  # list of all .pdfs in the folder
+new_list = [x.split("-") for x in dframe]  # split the data by dash (-)
+dframe2 = pd.DataFrame(new_list)  # create a DataFrame with the split data
+fnames = []  # an empty list - will be used for renaming files
+
+
+def main():  # append encoded filenames to a list
+
+        os.chdir(source)  # change your current working directory to source
+
+        i = 1
+        j = 1
+        k = 1
+        l = 1
+        m = 1
+        n = 1
+        o = 1
+        p = 1
+        q = 1
+        r = 1
+
+        for x in dframe2[0]:  # first column with index 0
+
+            my_dest = 'CLE ' + cur_day + ' 00' + str(i) + ".pdf"
+            my_dest2 = 'DBD ' + cur_day + ' 00' + str(j) + ".pdf"
+            my_dest3 = 'CGF ' + cur_day + ' 00' + str(k) + ".pdf"
+            my_dest4 = 'CLE ' + cur_day + ' 00' + str(l) + ".pdf"
+            my_dest5 = 'DMM ' + cur_day + ' 00' + str(m) + ".pdf"
+            my_dest6 = 'DQT ' + cur_day + ' 00' + str(n) + ".pdf"
+            my_dest7 = 'SRI ' + cur_day + ' 00' + str(o) + ".pdf"
+            my_dest8 = 'CAL ' + cur_day + ' 00' + str(p) + ".pdf"
+            my_dest9 = 'BIL ' + cur_day + ' 00' + str(q) + ".pdf"
+            my_dest10 = 'DEL ' + cur_day + ' 00' + str(r) + ".pdf"
+
+            if x == 'JOHN ':
+                fnames.append(my_dest)
+                i += 1
+            elif x == 'BILLY ':
+                fnames.append(my_dest2)
+                j += 1
+            elif x == 'HANNAH ':
+                fnames.append(my_dest3)
+                k += 1
+            elif x == 'STEVE ':
+                fnames.append(my_dest4)
+                l += 1
+            elif x == 'MIKE ' \
+                    or x == 'MIKE AAA ':
+                        fnames.append(my_dest5)
+                        m += 1
+            elif x == 'BILLY BOB ':
+                fnames.append(my_dest6)
+                n += 1
+            elif x == 'LOUIE ':
+                fnames.append(my_dest7)
+                o += 1
+            elif x == 'CARL ':
+                fnames.append(my_dest8)
+                p += 1
+            elif x == 'FRED ':
+                fnames.append(my_dest9)
+                q += 1
+            elif x == 'MARY ANN ':
+                fnames.append(my_dest10)
+                r += 1
+
+
+# rename the files in the folder with the codes from the list
+def renamr():
+    i = 0
+    for filename in os.listdir(source):
+        os.rename(filename, fnames[i])
+        i += 1
+
+
+# clean the data and save it as an excel file
+def export():
+    dframe2[8] = fnames
+    dframe2[8] = dframe2[8].str.replace(".pdf", "")
+    dframe2[6] = dframe2[6].str.replace(".pdf", "")
+    dframe2[6] = dframe2[6].str.replace(' ', '')
+    try:
+        dframe2[7] = dframe2[7].str.replace(".pdf", "")
+    except KeyError:
+        pass
+    dframe2[3] = dframe2[3].str.replace(' ', '')
+    dframe2[3] = dframe2[3].str.replace(',', '')
+    dframe2[3] = pd.to_numeric(dframe2[3])
+    dframe3 = dframe2.sort_values(8, ascending=True)
+    dframe3.to_excel(source + "\\files.xlsx", header=False, index=False)
+
+
+if __name__ == "__main__":
+    main()
+    renamr()
+    export()
